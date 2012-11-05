@@ -28,8 +28,10 @@ For example:
     {
         "address": "test.my_persistor",
         "host": "192.168.1.100",
-        "port": 27000
-        "db_name": "my_db"
+        "port": 27000,
+        "db_name": "my_db",
+        "username": "user",
+        "passpowrd": "pass"
     }        
     
 Let's take a look at each field in turn:
@@ -38,6 +40,8 @@ Let's take a look at each field in turn:
 * `host` Host name or ip address of the MongoDB instance. Defaults to `localhost`.
 * `port` Port at which the MongoDB instance is listening. Defaults to `27017`.
 * `db_name` Name of the database in the MongoDB instance to use. Defaults to `default_db`.
+* `username` and `password` are optional. If given, the MongoDB driver attempt to login to a database after 
+connecting to a database server.
 
 ## Operations
 
@@ -141,9 +145,6 @@ An example would be:
 
 
 
-
-
-
 ### Find
 
 Finds matching documents in the database.
@@ -167,6 +168,7 @@ Where:
 * `skip` is a number which determines the number of documents to skip. This is optional. By default no documents are skipped.
 * `limit` is a number which determines the maximum total number of documents to return. This is optional. By default all documents are returned.
 * `batch_size` is a number which determines how many documents to return in each reply JSON message. It's optional and the default value is `100`. Batching is discussed in more detail below.
+* `sort` is an optional JSON object that contains the fields to sort the result. See MongoDB manual for more information. Example: {'name': -1} sort by name in a revert order.
 
 An example would be:
 
@@ -176,9 +178,12 @@ An example would be:
         "matcher": {
             "item": "cheese"
         }
+        "sort": {
+            "date": 1
+        }
     }  
     
-This would return all orders where the `item` field has the value `cheese`. 
+This would return all orders where the `item` field has the value `cheese`. The result is order by date.
 
 When the find complete successfully, a reply message is sent back to the sender with the following data:
 
@@ -388,3 +393,9 @@ If an error occurs in finding the documents a reply is returned:
     }
     
 Where `message` is an error message. 
+
+# TODO Commands
+
+# TODO getCollection
+
+# TODO collectionStats
